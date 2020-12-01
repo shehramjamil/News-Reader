@@ -1,0 +1,10 @@
+
+
+1. Qualifiers is another way of annotation which can be used when we have two dependency functions here of same return type
+2. observeOn(AndroidSchedulers.mainThread())  // This is added becuase the recycler view have to update the UI and main thread
+   is used to do the UI related stuff like updating the recyclerview otherwise list will be shown on touch
+3. // Below code is for regular observers
+   /*viewModel.fetchNews
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())  // to do the UI related stuff otherwise list will be shown on touch
+                .subscribe(observer())*/
