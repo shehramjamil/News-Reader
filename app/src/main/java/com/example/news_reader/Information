@@ -8,3 +8,34 @@
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())  // to do the UI related stuff otherwise list will be shown on touch
                 .subscribe(observer())*/
+4. MutableLiveData class has two functions. setValue() method must be called from the main thread.
+   But if you need set a value from a background thread, postValue() should be used.
+5. First way to set the url parameters
+   // @GET("v2/top-headlines?country=us&pageSize=100&apiKey=c39c26bf69914fb2bc927a8956baea5e")
+   // suspend fun getNews(): Response<NewsResponse>
+
+6. // another way to send URL parameters
+       @GET("v2/top-headlines/")
+       suspend fun getNews(
+           @Query("country") userName: String = "us",
+           @Query("pageSize") pageSize: String = "100",
+           @Query("apiKey") apikey: String = "c39c26bf69914fb2bc927a8956baea5e"
+       ): Response<NewsResponse>
+
+7.  When we use mapper, we can get rid of following code in which we usually convert the network model into database model for insertion into local database
+    // var newsArrayList: ArrayList<News> = ArrayList()
+         resultRetrofit.body()?.articles?.forEach {
+                   newsArrayList.add(
+                       News(
+                           title = it.title,
+                           publishedDataTime = it.publishedAt,
+                           newsDescription = it.description,
+                           imageURL = it.urlToImage
+                       )
+                   )
+               }
+               db.News().insertAll(newsArrayList)
+
+8.  a. While using findViewById(), we have to set the type of the view explicitly and it can also return a null ,
+    b. View Binding does not need explicit data type declaration and it and also provides compile time and null safety
+    c. Easier is Kotlin Synthetic extensions
