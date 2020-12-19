@@ -1,4 +1,4 @@
-package com.example.news_reader
+package com.example.news_reader.utils
 
 // HTTP Error Response Codes
 const val CODE400: String = "Bad Request. The request was unacceptable, often due to a missing or misconfigured parameter"

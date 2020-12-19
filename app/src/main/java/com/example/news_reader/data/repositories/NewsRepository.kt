@@ -1,14 +1,14 @@
 package com.example.news_reader.data.repositories
 
-import com.example.news_reader.CODE400
-import com.example.news_reader.CODE401
-import com.example.news_reader.CODE429
-import com.example.news_reader.CODE500
+import com.example.news_reader.utils.CODE400
+import com.example.news_reader.utils.CODE401
+import com.example.news_reader.utils.CODE429
+import com.example.news_reader.utils.CODE500
 import com.example.news_reader.data.mappers.NewsMapper
 import com.example.news_reader.data.retrofit.RetrofitInterface
 import com.example.news_reader.data.room.RoomDB
-import com.example.news_reader.data.model.room.News
 import com.example.news_reader.data.room.NewsDao
+import com.example.news_reader.domain.repositories.NewsRepositoryInterface
 import com.example.news_reader.utils.CheckInternetAvailability
 import com.example.news_reader.utils.NetworkResponse
 import kotlinx.coroutines.flow.collect
@@ -27,29 +27,37 @@ class NewsRepository @Inject constructor(
     db: RoomDB,
     private val cm: CheckInternetAvailability,
     private val newsMapper: NewsMapper
-) {
+) : NewsRepositoryInterface {
+
     private val newsDao: NewsDao = db.News()
 
-
-    fun getNewsData() = flow {
+    /*override fun getNewsDataLocally() = flow {
         if (cm.checkInternetAvailability()) {
-            val newsDataFromServer = newsDataFromServer()
+            val newsDataFromServer = getNewsDataFromServer()
             if (newsDataFromServer != 200) {
                 emit(NetworkResponse.error(handleHTTPCodes(newsDataFromServer)))
-            } else {
-                newsDao.getAll().collect { newsList ->
-                    emit(NetworkResponse.success(newsList))
-                }
             }
         } else {
             emit(NetworkResponse.error("Internet Unavailable"))
-            newsDao.getAll().collect { newsList ->
-                emit(NetworkResponse.success(newsList))
+        }
+        newsDao.getAll()?.collect { newsList ->
+            emit(NetworkResponse.success(newsMapper.localToBuisnessModelMapping(newsList)))
+        }
+    }*/
+
+
+    override fun getNewsDataLocally() = flow {
+        newsDao.getAll()?.collect { newsList ->
+            if (newsList.isEmpty()) {
+                emit(NetworkResponse.error("News Unavailable"))
+            } else {
+                emit(NetworkResponse.success(newsMapper.localToBuisnessModelMapping(newsList)))
             }
         }
     }
 
-    private suspend fun newsDataFromServer(): Int {
+
+    override suspend fun getNewsDataFromServer(): Int {
         val resultRetrofit = retrofitInterface.getNews()
         return if (resultRetrofit.isSuccessful) {
             newsDao.insertAll(newsMapper.networkToLocalModelMapping(resultRetrofit.body()))

@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NewsDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAll(news: ArrayList<News>)
+    fun insertAll(news: List<News>?)
 
-    @Query("SELECT * FROM newsData")
-    fun getAll(): Flow<List<News>>
+    @Query("SELECT * FROM newsData order by publishedDateTime DESC")
+    fun getAll(): Flow<List<News>> ?
 
     @Query("SELECT COUNT(*)  FROM newsData")
     fun checkIfEmpty():Flow<Int>

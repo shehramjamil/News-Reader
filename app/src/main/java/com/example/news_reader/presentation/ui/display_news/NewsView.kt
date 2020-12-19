@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.news_reader.data.model.room.News
+import androidx.work.*
+import com.example.news_reader.domain.models.NewsBuisnessModel
 import com.example.news_reader.databinding.ActivityMainBinding
 import com.example.news_reader.utils.NetworkResponse
 import com.google.android.material.snackbar.Snackbar
@@ -41,7 +43,7 @@ class NewsView : AppCompatActivity() {
         recyclerView.addItemDecoration(divider)
     }
 
-    private fun newsDataObserver(): Observer<NetworkResponse<List<News>>> {
+    private fun newsDataObserver(): Observer<NetworkResponse<List<NewsBuisnessModel>>> {
         return Observer {
             when (it.status) {
                 NetworkResponse.Status.SUCCESS -> {
@@ -58,6 +60,15 @@ class NewsView : AppCompatActivity() {
             }
         }
     }
+
+    fun getNewsWorkerInfo()
+    {
+        WorkManager.getInstance(this).getWorkInfosForUniqueWorkLiveData("newsDownloader").observe(this){
+            //if(it[0].state == WorkInfo.State.SUCCEEDED)
+        }
+    }
+
+
 }
 
 

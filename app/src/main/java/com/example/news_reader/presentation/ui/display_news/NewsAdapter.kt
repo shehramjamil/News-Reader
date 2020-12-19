@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.news_reader.R
-import com.example.news_reader.data.model.room.News
+import com.example.news_reader.domain.models.NewsBuisnessModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -20,9 +20,9 @@ class NewsAdapter @Inject constructor(
 ) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
 
-    var list: ArrayList<News> = ArrayList()
+    var list: ArrayList<NewsBuisnessModel> = ArrayList()
 
-    fun addData(data: List<News>) {
+    fun addData(data: List<NewsBuisnessModel>) {
         list.clear()
         list.addAll(data)
         notifyDataSetChanged()
@@ -40,6 +40,7 @@ class NewsAdapter @Inject constructor(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.newsDescription.text = list[position].newsDescription
+        holder.publishedDateTime.text = list[position].publishedDataTime
 
 
         //val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL) // Optional for storing images
@@ -59,10 +60,11 @@ class NewsAdapter @Inject constructor(
         val newsDescription: TextView = view.findViewById(R.id.description)
         val image: ImageView = view.findViewById(R.id.image)
         var progressBar: ProgressBar = view.findViewById(R.id.progressBar)
+        var publishedDateTime : TextView = view.findViewById(R.id.publishedDataTime)
 
         init {
             view.setOnClickListener {
-                val newsData = list.toTypedArray()[adapterPosition]
+               // val newsData = list.toTypedArray()[adapterPosition]
 
             }
         }
