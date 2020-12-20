@@ -8,36 +8,35 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.example.news_reader.data.mappers.NewsMapper
-import com.example.news_reader.data.retrofit.RetrofitInterface
-import com.example.news_reader.data.room.NewsDao
+import com.example.news_reader.data.retrofit.RetrofitInterfaceIml
+import com.example.news_reader.data.room.NewsDaoImplementation
 import com.example.news_reader.data.room.RoomDB
 import com.example.news_reader.utils.CheckInternetAvailability
-import javax.inject.Inject
-import kotlin.random.Random
 
 class NewsWorkManager @WorkerInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    var retrofitInterface: RetrofitInterface,
+    var retrofitInterfaceIml: RetrofitInterfaceIml,
     var newsMapper: NewsMapper,
-     db: RoomDB
+    db: RoomDB,
+    var cm: CheckInternetAvailability
 ) :
     CoroutineWorker(appContext, workerParams) {
 
-    private var newsDao: NewsDao = db.News()
+    private var newsDao: NewsDaoImplementation = db.News()
 
     override suspend fun doWork(): Result {
 
-        val resultRetrofit = retrofitInterface.getNews()
+        if (cm.checkInternetAvailability()) {
+            val resultRetrofit = retrofitInterfaceIml.getNews()
+            if (resultRetrofit.isSuccessful && resultRetrofit.body() != null) {
+                newsDao.insertAll(newsMapper.networkToLocalModelMapping(resultRetrofit.body()))
+                return Result.success()
+            } else {
 
-        if (resultRetrofit.isSuccessful && resultRetrofit.body() != null) {
-            newsDao.insertAll(newsMapper.networkToLocalModelMapping(resultRetrofit.body()))
-            Log.d("Worker Message", resultRetrofit.message())
+                return Result.failure(workDataOf("Error Code" to resultRetrofit.code()))
+            }
         }
-        else
-        {
-            return Result.failure(workDataOf("Error Code" to resultRetrofit.code()))
-        }
-        return Result.success()
+        return Result.failure()
     }
 }

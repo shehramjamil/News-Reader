@@ -23,7 +23,6 @@ class NewsViewModel @ViewModelInject constructor(
         setNewsWorkManager(context)
     }
 
-
     val newsData: LiveData<NetworkResponse<List<NewsBuisnessModel>>>
         get() = newsRepository.getNewsDataLocally().asLiveData()
 
@@ -33,21 +32,21 @@ class NewsViewModel @ViewModelInject constructor(
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val newsDownloadWorkRequest: PeriodicWorkRequest =
-            PeriodicWorkRequestBuilder<NewsWorkManager>(4, TimeUnit.HOURS)
+        val newsDownloadWorkRequest: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<NewsWorkManager>()
                 .setConstraints(constraints)
-                .addTag("News-Downloader")
+                .addTag("newsDownloader")
+                //.setInitialDelay(1,TimeUnit.MINUTES)
                 // .setInputData(workDataOf("Signal" to "Some Data"))
                 .build()
 
         WorkManager
             .getInstance(context)
-            .enqueueUniquePeriodicWork(
+            .enqueueUniqueWork(
                 "newsDownloader",
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingWorkPolicy.KEEP,
                 newsDownloadWorkRequest
             )
-
     }
 
 

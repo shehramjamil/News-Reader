@@ -6,5 +6,4 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsRepositoryInterface {
     fun getNewsDataLocally() : Flow<NetworkResponse<List<NewsBuisnessModel>>>
-    suspend fun getNewsDataFromServer() :Int
 }

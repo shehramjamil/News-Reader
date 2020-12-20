@@ -2,7 +2,7 @@ package com.example.news_reader.hilt
 
 import android.content.Context
 import com.example.news_reader.data.room.RoomDB
-import com.example.news_reader.data.retrofit.RetrofitInterface
+import com.example.news_reader.data.retrofit.RetrofitInterfaceIml
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +26,7 @@ class NetworkingModule {
 
     @Provides
     @Singleton
-    fun prepareRetrofit(): RetrofitInterface {
+    fun prepareRetrofit(): RetrofitInterfaceIml {
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl("https://newsapi.org/")
             //.addCallAdapterFactory(RxJava2CallAdapterFactory.create()) //only when using ReactiveX
@@ -34,7 +34,7 @@ class NetworkingModule {
             .client(okHTTPClient())  // We can add http interceptors later in okhttp
             .build()
 
-        return retrofitBuilder.create(RetrofitInterface::class.java)
+        return retrofitBuilder.create(RetrofitInterfaceIml::class.java)
     }
 }
 

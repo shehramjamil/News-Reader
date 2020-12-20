@@ -2,4 +2,7 @@
     <string name="app_name">News_Reader</string>
     <string name="news_description">News_Description</string>
     <string name="image_description">News Image</string>
+    <string name="published_time_and_date">Published Time and Date</string>
+    <string name="top_stories">Top Stories</string>
+
 </resources>
