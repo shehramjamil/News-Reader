@@ -11,7 +11,7 @@ import com.example.news_reader.data.model.room.News
 abstract class RoomDB : RoomDatabase() {
 
     // Create abstract methods for any DAOs
-    abstract fun News(): NewsDao
+    abstract fun News(): NewsDaoImplementation
 
     // Room Initialisation
     companion object {

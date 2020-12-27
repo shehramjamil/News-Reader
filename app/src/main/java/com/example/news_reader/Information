@@ -39,3 +39,4 @@
 8.  a. While using findViewById(), we have to set the type of the view explicitly and it can also return a null ,
     b. View Binding does not need explicit data type declaration and it and also provides compile time and null safety
     c. Easier is Kotlin Synthetic extensions
+9. if (resultRetrofit.code() in (200 .. 300))   // comparison technique
