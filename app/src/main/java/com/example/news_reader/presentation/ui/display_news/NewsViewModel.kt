@@ -1,13 +1,18 @@
 package com.example.news_reader.presentation.ui.display_news
 
 import android.content.Context
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import androidx.paging.*
 import androidx.work.*
+import com.example.news_reader.data.model.room.News
+import com.example.news_reader.data.repositories.ExampleRemoteMediator
 import com.example.news_reader.domain.models.NewsBuisnessModel
 import com.example.news_reader.data.repositories.NewsRepository
+import com.example.news_reader.data.room.RoomDB
 import com.example.news_reader.data.work_manager.NewsWorkManager
-import com.example.news_reader.utils.NetworkResponse
+import com.example.news_reader.utils.CustomResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityScoped
 import java.util.concurrent.TimeUnit
@@ -16,18 +21,35 @@ import java.util.concurrent.TimeUnit
 @ActivityScoped
 class NewsViewModel @ViewModelInject constructor(
     var newsRepository: NewsRepository,
-    @ApplicationContext context: Context
+    @ApplicationContext var context: Context,
+    db: RoomDB
 ) : ViewModel() {
 
+
+
+    val newsDao = db.news()
+    @ExperimentalPagingApi
+    val pager = Pager(
+        config = PagingConfig(pageSize = 20),
+        remoteMediator = ExampleRemoteMediator()
+
+    ) {
+        newsDao.getAll()
+
+    }.flow
+
+
+
     init {
-        setNewsWorkManager(context)
+        setNewsWorkManager()
     }
 
-    val newsData: LiveData<NetworkResponse<List<NewsBuisnessModel>>>
+    val newsData: LiveData<CustomResponse<List<NewsBuisnessModel>>>
         get() = newsRepository.getNewsDataLocally().asLiveData()
 
 
-    private fun setNewsWorkManager(context: Context) {
+
+    fun setNewsWorkManager() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
@@ -36,7 +58,7 @@ class NewsViewModel @ViewModelInject constructor(
             OneTimeWorkRequestBuilder<NewsWorkManager>()
                 .setConstraints(constraints)
                 .addTag("newsDownloader")
-                //.setInitialDelay(1,TimeUnit.MINUTES)
+                .setInitialDelay(5, TimeUnit.SECONDS)
                 // .setInputData(workDataOf("Signal" to "Some Data"))
                 .build()
 
@@ -44,9 +66,10 @@ class NewsViewModel @ViewModelInject constructor(
             .getInstance(context)
             .enqueueUniqueWork(
                 "newsDownloader",
-                ExistingWorkPolicy.KEEP,
+                ExistingWorkPolicy.REPLACE,
                 newsDownloadWorkRequest
             )
+
     }
 
 

@@ -40,3 +40,13 @@
     b. View Binding does not need explicit data type declaration and it and also provides compile time and null safety
     c. Easier is Kotlin Synthetic extensions
 9. if (resultRetrofit.code() in (200 .. 300))   // comparison technique
+
+
+
+
+
+Later
+Pagination
+upadting the list with a new post icon
+Glide Caching deletion
+Old News Deletion

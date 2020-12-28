@@ -5,12 +5,14 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -30,8 +32,10 @@ class NewsAdapter @Inject constructor(
     var list: ArrayList<NewsBuisnessModel> = ArrayList()
 
     fun addData(data: List<NewsBuisnessModel>) {
-        list.clear()
-        list.addAll(data)
+        if (!list.containsAll(data)) {
+            list.clear()
+            list.addAll(data)
+        }
         notifyDataSetChanged()
     }
 
@@ -107,6 +111,17 @@ class NewsAdapter @Inject constructor(
 
         }
 
+    }
+
+    object UserComparator : DiffUtil.ItemCallback<NewsBuisnessModel>() {
+        override fun areItemsTheSame(oldItem: NewsBuisnessModel, newItem: NewsBuisnessModel): Boolean {
+            // Id is unique.
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: NewsBuisnessModel, newItem: NewsBuisnessModel): Boolean {
+            return oldItem == newItem
+        }
     }
 
 }

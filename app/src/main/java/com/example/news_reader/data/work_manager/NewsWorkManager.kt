@@ -1,7 +1,6 @@
 package com.example.news_reader.data.work_manager
 
 import android.content.Context
-import android.util.Log
 import androidx.hilt.Assisted
 import androidx.hilt.work.WorkerInject
 import androidx.work.CoroutineWorker
@@ -9,7 +8,7 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.example.news_reader.data.mappers.NewsMapper
 import com.example.news_reader.data.retrofit.RetrofitInterfaceIml
-import com.example.news_reader.data.room.NewsDaoImplementation
+import com.example.news_reader.data.room.NewsDaoImpl
 import com.example.news_reader.data.room.RoomDB
 import com.example.news_reader.utils.CheckInternetAvailability
 
@@ -23,7 +22,7 @@ class NewsWorkManager @WorkerInject constructor(
 ) :
     CoroutineWorker(appContext, workerParams) {
 
-    private var newsDao: NewsDaoImplementation = db.News()
+    private var newsDao: NewsDaoImpl = db.news()
 
     override suspend fun doWork(): Result {
 
