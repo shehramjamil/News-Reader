@@ -62,12 +62,6 @@ class NewsView : AppCompatActivity() {
 
             viewModel.pager.collectLatest {
                     newsAdapter.submitData(it)
-
-            /*it.map { news ->
-                    Log.d("dataaaaaaaaaaaaaa", news.toString())
-                   val list =  newsMapper.localToBuisnessModelMapping(news)
-                    newsAdapter.addData(list)
-                }*/
                }
         }
 

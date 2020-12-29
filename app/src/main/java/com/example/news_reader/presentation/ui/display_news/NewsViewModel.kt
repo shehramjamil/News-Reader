@@ -8,8 +8,6 @@ import androidx.paging.*
 import androidx.work.*
 import com.example.news_reader.data.model.room.News
 import com.example.news_reader.data.repositories.ExampleRemoteMediator
-import com.example.news_reader.domain.models.NewsBuisnessModel
-import com.example.news_reader.data.repositories.NewsRepository
 import com.example.news_reader.data.room.RoomDB
 import com.example.news_reader.data.work_manager.NewsWorkManager
 import com.example.news_reader.utils.CustomResponse
@@ -20,7 +18,6 @@ import java.util.concurrent.TimeUnit
 
 @ActivityScoped
 class NewsViewModel @ViewModelInject constructor(
-    var newsRepository: NewsRepository,
     @ApplicationContext var context: Context,
     db: RoomDB
 ) : ViewModel() {
@@ -44,8 +41,6 @@ class NewsViewModel @ViewModelInject constructor(
         setNewsWorkManager()
     }
 
-    val newsData: LiveData<CustomResponse<List<NewsBuisnessModel>>>
-        get() = newsRepository.getNewsDataLocally().asLiveData()
 
 
 
