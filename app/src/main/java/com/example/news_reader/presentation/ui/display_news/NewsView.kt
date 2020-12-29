@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 
@@ -36,6 +37,7 @@ class NewsView : AppCompatActivity() {
 
     @Inject
     lateinit var newsAdapter: PagingAdapter2
+
 
     @Inject
     lateinit var newsMapper: NewsMapper
@@ -54,22 +56,22 @@ class NewsView : AppCompatActivity() {
         progressBar = bind.progressBar
 
         setupRecycler()
-        newsWorkRequestObserver()
-
-        //viewModel.newsData.observe(this, newsLocalDataObserver())
 
         lifecycleScope.launch {
 
             viewModel.pager.collectLatest {
-                    newsAdapter.submitData(it)
-               }
-        }
+                newsAdapter.submitData(it)
+            }
 
+            newsAdapter
+                .withLoadStateHeaderAndFooter(
+                    header = ExampleLoadStateAdapter(newsAdapter::retry),
+                    footer = ExampleLoadStateAdapter(newsAdapter::retry)
+                )
+        }
 
         swipeRefresh.setOnRefreshListener {
-            viewModel.setNewsWorkManager()
         }
-
 
     }
 
@@ -82,45 +84,6 @@ class NewsView : AppCompatActivity() {
         recyclerView.addItemDecoration(divider)
     }
 
-    private fun newsWorkRequestObserver() {
-        WorkManager.getInstance(this).getWorkInfosForUniqueWorkLiveData("newsDownloader")
-            .observe(this) { workInfoList ->
-                swipeRefresh.isRefreshing = false
-                when (workInfoList[0].state) {
-                    WorkInfo.State.SUCCEEDED -> {
-                        Toast.makeText(this, "Network Request Successful", Toast.LENGTH_LONG).show()
-                    }
-
-                    WorkInfo.State.FAILED -> {
-                        val httpStatusInfo =
-                            handleHTTPCodes(workInfoList[0].outputData.getInt("Error Code", 0))
-                        Toast.makeText(this, httpStatusInfo, Toast.LENGTH_LONG).show()
-                    }
-
-                    else -> {
-                    }
-                }
-            }
-    }
-
-    private fun newsLocalDataObserver(): Observer<CustomResponse<List<NewsBuisnessModel>>> {
-        return Observer {
-            when (it.status) {
-                CustomResponse.Status.SUCCESS -> {
-
-                    //newsAdapter.addData(it.data!!)
-                    progressBar.visibility = View.GONE
-                }
-                CustomResponse.Status.ERROR -> {
-                }
-                CustomResponse.Status.LOADING -> {
-                    Snackbar.make(bind.newsView, "Downloading News", Snackbar.LENGTH_SHORT)
-                        .show()
-                }
-            }
-        }
-    }
-
     private fun handleHTTPCodes(code: Int): String {
         return when (code) {
             400 -> CODE400
@@ -131,6 +94,7 @@ class NewsView : AppCompatActivity() {
         }
 
     }
+
 
 }
 

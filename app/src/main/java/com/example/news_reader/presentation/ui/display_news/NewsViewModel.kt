@@ -1,71 +1,35 @@
 package com.example.news_reader.presentation.ui.display_news
 
 import android.content.Context
-import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.*
-import androidx.work.*
-import com.example.news_reader.data.model.room.News
-import com.example.news_reader.data.repositories.ExampleRemoteMediator
+import com.example.news_reader.data.mappers.NewsMapper
+import com.example.news_reader.data.repositories.NewsRemoteMediatorRepository
+import com.example.news_reader.data.retrofit.RetrofitInterfaceIml
 import com.example.news_reader.data.room.RoomDB
-import com.example.news_reader.data.work_manager.NewsWorkManager
-import com.example.news_reader.utils.CustomResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityScoped
-import java.util.concurrent.TimeUnit
 
 
 @ActivityScoped
 class NewsViewModel @ViewModelInject constructor(
     @ApplicationContext var context: Context,
-    db: RoomDB
+    var db: RoomDB,
+    var retrofitInterfaceIml: RetrofitInterfaceIml,
+    var newsMapper: NewsMapper
 ) : ViewModel() {
 
-
-
     val newsDao = db.news()
+
     @ExperimentalPagingApi
     val pager = Pager(
-        config = PagingConfig(pageSize = 20),
-        remoteMediator = ExampleRemoteMediator()
-
+        config = PagingConfig(pageSize = 5, initialLoadSize = 5),
+        remoteMediator = NewsRemoteMediatorRepository(newsDao, retrofitInterfaceIml, newsMapper)
     ) {
         newsDao.getAll()
 
     }.flow
-
-
-
-    init {
-        setNewsWorkManager()
-    }
-
-
-
-
-    fun setNewsWorkManager() {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val newsDownloadWorkRequest: OneTimeWorkRequest =
-            OneTimeWorkRequestBuilder<NewsWorkManager>()
-                .setConstraints(constraints)
-                .addTag("newsDownloader")
-                .setInitialDelay(5, TimeUnit.SECONDS)
-                // .setInputData(workDataOf("Signal" to "Some Data"))
-                .build()
-
-        WorkManager
-            .getInstance(context)
-            .enqueueUniqueWork(
-                "newsDownloader",
-                ExistingWorkPolicy.REPLACE,
-                newsDownloadWorkRequest
-            )
-
-    }
 
 
 }

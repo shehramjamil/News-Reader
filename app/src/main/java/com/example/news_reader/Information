@@ -41,6 +41,12 @@
     c. Easier is Kotlin Synthetic extensions
 9. if (resultRetrofit.code() in (200 .. 300))   // comparison technique
 
+10. //use it when using the ids of the stored data inside the load function append statement
+                    /*val lastItem = state.lastItemOrNull()
+                        ?: return MediatorResult.Success(
+                            endOfPaginationReached = true
+                        )
+                    lastItem.id*/
 
 
 
