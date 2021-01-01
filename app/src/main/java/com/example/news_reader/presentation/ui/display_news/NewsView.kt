@@ -39,27 +39,31 @@ class NewsView : AppCompatActivity() {
         progressBar = activityBind.progressBar
 
         setupRecycler()
+try {
 
-        lifecycleScope.launch {
-            viewModel.pager.collectLatest {
-                adapter.submitData(it)
-            }
+    lifecycleScope.launch {
+        viewModel.pager.collectLatest {
+            adapter.submitData(it)
         }
+    }
 
-        // Showing loading states using LoadState Listener[Adapter can also be used]
-        lifecycleScope.launch {
-            adapter.loadStateFlow.collectLatest { loadState ->
-                progressBar.isVisible = loadState.append is LoadState.Loading
-            if(loadState.prepend.endOfPaginationReached){
-                adapter.refresh()
-            }
-            }
-        }
+    // Showing loading states using LoadState Listener[Adapter can also be used]
+    lifecycleScope.launch {
+        adapter.loadStateFlow.collectLatest { loadState ->
+            progressBar.isVisible = loadState.append is LoadState.Loading
 
-        swipeRefresh.setOnRefreshListener {
-            adapter.refresh()
-            swipeRefresh.isRefreshing = false
         }
+    }
+
+    swipeRefresh.setOnRefreshListener {
+        adapter.refresh()
+        swipeRefresh.isRefreshing = false
+    }
+}
+catch (e:Exception)
+{
+    e.printStackTrace()
+}
     }
 
     private fun setupRecycler() {

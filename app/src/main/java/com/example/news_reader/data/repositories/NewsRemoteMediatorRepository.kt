@@ -46,7 +46,7 @@ class NewsRemoteMediatorRepository(
             // This News Api has not paging number so doing it manually
             val loadKey = when (loadType) {
                 LoadType.REFRESH -> 1
-                LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = false)
+                LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> 2
             }
 

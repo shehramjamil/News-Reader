@@ -59,6 +59,17 @@
      Use LoadStateViewHolder file for this but listener implementation in activity is much easy
 
 12. Append is called when the list anchor reaches 5 items before the end position.
+    How Pagination library checks for load states
+    1. Checks for Refresh fist time in the start
+    2. Checks prepend first time in the start (if  prepend returns endOfPaginationReached=true, then
+       after returning fom bottom end to the top does not trigger the prepend and on endOfPaginationReached=false,)
+       The prepend state is triggered as long as the data kees coming fom server.
+    3. Library checks for append when the anchor position is 5 items before the end of the list and keeps appending unill
+       the data keeps coming.
+       So endOfPaginationReached should be true in the end when no data is received from server.
+    4. If endOfPaginationReached=true on Refresh, the library does not append/prepend again.
+       endOfPaginationReached=true means we have reached pagination on the first page so no need to prepend and append
+
 
 
 
