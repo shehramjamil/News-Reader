@@ -9,5 +9,5 @@ interface NewsDao {
     fun insertAll(news: List<News>?)
     fun getAll(): PagingSource<Int,News>
     fun checkIfEmpty():Flow<Int>
-    fun delete(news: News)
+    fun delete()
 }

@@ -9,6 +9,7 @@ interface RetrofitInterface {
         country: String,
         pageSize: String,
         page: String,
+        category:String,
         apikey: String
     ): Response<NewsResponse>
 }

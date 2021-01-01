@@ -17,8 +17,10 @@ interface RetrofitInterfaceIml:RetrofitInterface{
     override suspend fun getNews(
         @Query("country") country: String,
         @Query("pageSize") pageSize: String,
-        @Query("pageSize") page: String,
+        @Query("page") page: String,
+        @Query("category") category:String,
         @Query("apiKey") apikey: String
+
     ): Response<NewsResponse>
 
 }

@@ -48,6 +48,18 @@
                         )
                     lastItem.id*/
 
+11. //For showing the load state using adapter
+    /*   lifecycleScope.launch {
+                newsAdapter
+                    .withLoadStateHeaderAndFooter(
+                //        header = ExampleLoadStateAdapter(newsAdapter::retry),
+                  //      footer = ExampleLoadStateAdapter(newsAdapter::retry)
+                    )
+            }*/
+     Use LoadStateViewHolder file for this but listener implementation in activity is much easy
+
+12. Append is called when the list anchor reaches 5 items before the end position.
+
 
 
 

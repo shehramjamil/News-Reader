@@ -4,12 +4,14 @@ import android.content.Context
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.*
+import androidx.room.withTransaction
 import com.example.news_reader.data.mappers.NewsMapper
 import com.example.news_reader.data.repositories.NewsRemoteMediatorRepository
 import com.example.news_reader.data.retrofit.RetrofitInterfaceIml
 import com.example.news_reader.data.room.RoomDB
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityScoped
+import kotlinx.coroutines.flow.map
 
 
 @ActivityScoped
@@ -20,16 +22,19 @@ class NewsViewModel @ViewModelInject constructor(
     var newsMapper: NewsMapper
 ) : ViewModel() {
 
-    val newsDao = db.news()
+    private val newsDao = db.news()
 
     @ExperimentalPagingApi
     val pager = Pager(
-        config = PagingConfig(pageSize = 5, initialLoadSize = 5),
-        remoteMediator = NewsRemoteMediatorRepository(newsDao, retrofitInterfaceIml, newsMapper)
+        config = PagingConfig(pageSize = 5, initialLoadSize = 10, enablePlaceholders = false),
+        remoteMediator = NewsRemoteMediatorRepository(db, retrofitInterfaceIml, newsMapper)
     ) {
         newsDao.getAll()
-
-    }.flow
+    }.flow.cachedIn(viewModelScope).map {
+        it.map {
+            newsMapper.localToBuisnessModelMapping(it)
+        }
+    }
 
 
 }

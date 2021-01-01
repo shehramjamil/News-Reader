@@ -14,13 +14,13 @@ interface NewsDaoImpl : NewsDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     override fun insertAll(news: List<News>?)
 
-    @Query("SELECT * FROM newsData")
+    @Query("SELECT * FROM newsData order by publishedDateTime DESC")
     override  fun getAll(): PagingSource<Int,News>
 
     @Query("SELECT COUNT(*)  FROM newsData")
     override fun checkIfEmpty():Flow<Int>
 
-    @Delete
-    override fun delete(news: News)
+    @Query("Delete from newsData")
+    override fun delete()
 
 }
