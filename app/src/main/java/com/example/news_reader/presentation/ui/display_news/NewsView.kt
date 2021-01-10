@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,8 @@ import com.example.news_reader.utils.*
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -33,8 +36,9 @@ class NewsView : AppCompatActivity() {
         setContentView(bind.root)
 
         setupRecycler()
-        viewModel.newsData.observe(this, newsDataObserver())
-
+        lifecycleScope.launch {
+            viewModel.newsData2.observe(this@NewsView, newsDataObserver())
+        }
 
 
         WorkManager.getInstance(this).getWorkInfosForUniqueWorkLiveData("newsDownloader")
@@ -57,16 +61,16 @@ class NewsView : AppCompatActivity() {
         recyclerView.addItemDecoration(divider)
     }
 
-    private fun newsDataObserver(): Observer<NetworkResponse<List<NewsBuisnessModel>>> {
+    private fun newsDataObserver(): Observer<CustomResponseHandler<List<NewsBuisnessModel>>> {
         return Observer {
             when (it.status) {
-                NetworkResponse.Status.SUCCESS -> {
+                CustomResponseHandler.Status.SUCCESS -> {
                     newsAdapter.addData(it.data!!)
                     progressBar.visibility = View.GONE
                 }
-                NetworkResponse.Status.ERROR -> {
+                CustomResponseHandler.Status.ERROR -> {
                 }
-                NetworkResponse.Status.LOADING -> {
+                CustomResponseHandler.Status.LOADING -> {
                     Snackbar.make(bind.newsView, "Downloading News", Snackbar.LENGTH_SHORT)
                         .show()
                 }

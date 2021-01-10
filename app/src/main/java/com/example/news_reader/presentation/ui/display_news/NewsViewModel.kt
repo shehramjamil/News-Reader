@@ -4,28 +4,23 @@ import android.content.Context
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.work.*
-import com.example.news_reader.domain.models.NewsBuisnessModel
-import com.example.news_reader.data.repositories.NewsRepository
 import com.example.news_reader.data.work_manager.NewsWorkManager
-import com.example.news_reader.utils.NetworkResponse
+import com.example.news_reader.domain.usecases.GetNewsDataFromRoomDbUseCase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityScoped
-import java.util.concurrent.TimeUnit
 
 
 @ActivityScoped
 class NewsViewModel @ViewModelInject constructor(
-    var newsRepository: NewsRepository,
-    @ApplicationContext context: Context
+    @ApplicationContext context: Context,
+    private val getNewsDataFromRoomDbUseCase: GetNewsDataFromRoomDbUseCase
 ) : ViewModel() {
 
     init {
         setNewsWorkManager(context)
     }
 
-    val newsData: LiveData<NetworkResponse<List<NewsBuisnessModel>>>
-        get() = newsRepository.getNewsDataLocally().asLiveData()
-
+    val newsData2 get() = getNewsDataFromRoomDbUseCase.invoke().asLiveData()
 
     private fun setNewsWorkManager(context: Context) {
         val constraints = Constraints.Builder()
