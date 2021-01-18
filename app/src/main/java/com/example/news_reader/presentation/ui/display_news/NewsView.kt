@@ -40,17 +40,6 @@ class NewsView : AppCompatActivity() {
             viewModel.newsData2.observe(this@NewsView, newsDataObserver())
         }
 
-
-        WorkManager.getInstance(this).getWorkInfosForUniqueWorkLiveData("newsDownloader")
-            .observe(this) {
-                if (it[0].state == WorkInfo.State.FAILED) {
-                    val httpStatusInfo = handleHTTPCodes(it[0].outputData.getInt("Error Code",0))
-                    Toast.makeText(this,httpStatusInfo, Toast.LENGTH_LONG).show()
-
-                }
-            }
-
-
     }
 
     private fun setupRecycler() {
@@ -69,25 +58,16 @@ class NewsView : AppCompatActivity() {
                     progressBar.visibility = View.GONE
                 }
                 CustomResponseHandler.Status.ERROR -> {
+                    Toast.makeText(this,it.message,Toast.LENGTH_LONG).show()
                 }
                 CustomResponseHandler.Status.LOADING -> {
-                    Snackbar.make(bind.newsView, "Downloading News", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(bind.newsView, "No Data Found", Snackbar.LENGTH_SHORT)
                         .show()
                 }
             }
         }
     }
 
-    private fun handleHTTPCodes(code: Int): String {
-        return when (code) {
-            400 -> CODE400
-            401 -> CODE401
-            429 -> CODE429
-            500 -> CODE500
-            else -> "Unknown Error"
-        }
-
-    }
 
 }
 
