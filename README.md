@@ -6,25 +6,15 @@ Two Separate Branches Maintained for using diffeent libraries for the same News 
 
 Branch -> Master 
 
-1. Clean Code Principals (Use case exempted)
+1. Clean Code Architecture
 2. Separation of Concerns 
-3. MVVM pattern with Repository Pattern
+3. MVVM pattern with Repository Pattern and UseCases
 4. Work Manager JetPack For getting Network Data 
-4. Flows/LiveData
+4. Flows/coroutines and LiveData
 4. Hilt Dagger2.x
-5. Custom Pagination without any Library  
-7. Retrofit Networking Library 
+5. Custom Pagination with the help of Recycler Scroll Listener 
+7. Retrofit Networking Library with coroutine 
 8. Room DB with Flows
+9. UpComing -> Work Manager to get the news while app is closed
 
 
-Branch -> Pagination
-1. Clean Code Principals (Use case exempted)
-2. Separation of Concerns 
-3. MVVM pattern with RemoteMediator 
-4. Flows/LiveData
-4. Hilt Dagger2.x
-5. Pagination 3 JetPack [Remote Mediator,Room as Paging Source and Paging Recycler Adapter] 
-7. Retrofit Networking Library 
-8. Room DB with Pagination support and Flows
-
-The main purpose of this code is to provide a simplest,easiest and shortest way to start an app from scratch.
