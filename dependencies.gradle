@@ -15,7 +15,8 @@ ext {
     def rx_java_version = "2.2.6"
     def rx_kotlin_version = "2.2.0"
     def rx_android_version = "2.1.1"
-    def contrainLayout_version = "2.0.4"
+    def contraintLayout_version = "2.0.4"
+    def cardView_version = "1.0.0"
 
     hilt_dep = [
             //Hilt
@@ -52,23 +53,24 @@ ext {
     ]
 
     rx_dep = [
-            rx_java     : "io.reactivex.rxjava2:rxjava:$rx_java_version",
-            rx_kotlin   : "io.reactivex.rxjava2:rxkotlin:$rx_kotlin_version",
+            rx_java   : "io.reactivex.rxjava2:rxjava:$rx_java_version",
+            rx_kotlin : "io.reactivex.rxjava2:rxkotlin:$rx_kotlin_version",
             rx_android: "io.reactivex.rxjava2:rxandroid:$rx_android_version"
     ]
 
     other_dep = [
 
-            constrainLayout: "androidx.constraintlayout:constraintlayout:$contrainLayout_version",
+            cardLayout      : "androidx.cardview:cardview:$cardView_version",
+            constraintLayout: "androidx.constraintlayout:constraintlayout:$contraintLayout_version",
             //Work manager Kotlin + coroutines
-            workManager   : "androidx.work:work-runtime-ktx:$work_version",
+            workManager     : "androidx.work:work-runtime-ktx:$work_version",
             //Coroutines
-            coroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineAndroid_Version",
+            coroutines      : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineAndroid_Version",
             // LifeCycle
-            liveData      : "androidx.lifecycle:lifecycle-livedata-ktx:$liveData_version",
-            viewModel     : "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewModel_version",
+            liveData        : "androidx.lifecycle:lifecycle-livedata-ktx:$liveData_version",
+            viewModel       : "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewModel_version",
             // kotlin Extensions
-            coreKTX       : "androidx.core:core-ktx:$coreKTX_version",
-            implementation: "androidx.fragment:fragment-ktx:1.2.5"
+            coreKTX         : "androidx.core:core-ktx:$coreKTX_version",
+            implementation  : "androidx.fragment:fragment-ktx:1.2.5"
     ]
 }

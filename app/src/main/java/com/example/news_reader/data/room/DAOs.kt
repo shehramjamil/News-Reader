@@ -12,8 +12,8 @@ interface NewsDaoImplementation : NewsDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     override fun insertAll(news: List<News>?)
 
-    @Query("SELECT * FROM newsData order by publishedDateTime DESC")
-    override fun getAll(): Flow<List<News>> ?
+    @Query("SELECT * FROM newsData order by publishedDateTime DESC LIMIT 15 OFFSET :position")
+    override fun getAll(position : Int): Flow<List<News>> ?
 
     @Query("SELECT COUNT(*)  FROM newsData")
     override fun checkIfEmpty():Flow<Int>

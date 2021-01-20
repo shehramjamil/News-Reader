@@ -10,7 +10,11 @@ import retrofit2.http.*
 
 interface RetrofitInterfaceIml: RetrofitInterface {
 
-    @GET("v2/top-headlines?country=us&pageSize=20&apiKey=c39c26bf69914fb2bc927a8956baea5e")
-    override suspend fun getNews(): Response<NewsResponse>
+    @GET("v2/top-headlines/")
+    override suspend fun getNews(
+        @Query("country") countryName: String,
+        @Query("pageSize") pageSize: String,
+        @Query("apiKey") apiKey: String
+    ): Response<NewsResponse>
 
 }

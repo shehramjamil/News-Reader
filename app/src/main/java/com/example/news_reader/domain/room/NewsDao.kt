@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsDao {
     fun insertAll(news: List<News>?)
-    fun getAll(): Flow<List<News>>?
-    fun checkIfEmpty():Flow<Int>
+    fun getAll(position: Int): Flow<List<News>>?
+    fun checkIfEmpty(): Flow<Int>
     fun delete(news: News)
 }

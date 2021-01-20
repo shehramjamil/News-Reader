@@ -10,8 +10,8 @@ class GetRemoteDataAndSaveInRoomUseCase @Inject constructor(
     private val newsRepository: NewsRepository,
 ) {
 
-    suspend operator fun invoke(): String {
-        return handleHTTPCodes(newsRepository.getNewsDataFromServerAndSaveInRoom())
+    suspend operator fun invoke(countryName: String, pageSize: String, apiKey: String): String {
+        return handleHTTPCodes(newsRepository.getNewsDataFromServerAndSaveInRoom(countryName,pageSize,apiKey))
     }
 
     private fun handleHTTPCodes(code: Int): String {

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -30,7 +31,7 @@ class NewsAdapter @Inject constructor(
     var list: ArrayList<NewsBuisnessModel> = ArrayList()
 
     fun addData(data: List<NewsBuisnessModel>) {
-        list.clear()
+        //list.clear()
         list.addAll(data)
         notifyDataSetChanged()
     }
@@ -58,8 +59,9 @@ class NewsAdapter @Inject constructor(
             .centerCrop()
             .placeholder(ColorDrawable(Color.BLACK))
             .addListener(glideListener(holder))
-            .error(ColorDrawable(Color.DKGRAY))
+            .error(ColorDrawable(Color.BLACK))
             .into(holder.image)
+
 
     }
 
@@ -80,7 +82,6 @@ class NewsAdapter @Inject constructor(
         }
 
     }
-
 
     private fun glideListener(holder: ViewHolder): RequestListener<Drawable> {
         return object : RequestListener<Drawable> {
