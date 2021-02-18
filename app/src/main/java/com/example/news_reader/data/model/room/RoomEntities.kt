@@ -12,5 +12,8 @@ data class News(
     @ColumnInfo(name = "publishedDateTime")
     var publishedDataTime: String,
     @ColumnInfo(name = "news_description") val newsDescription: String?,
-    @ColumnInfo(name = "image_url") val imageURL: String?
+    @ColumnInfo(name = "image_url") val imageURL: String?,
+    @ColumnInfo(name = "web_url") val webURL: String?,
+    @ColumnInfo(name = "countryName") val countryName: String
+
 )

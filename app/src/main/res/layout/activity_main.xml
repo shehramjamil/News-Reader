@@ -1,31 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/newsView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/newsView"
     android:background="@color/dark_grey">
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recyclerViewForChoosingCountry"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:overScrollMode="never"
+        android:scrollbars="horizontal" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewForNews"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
         android:layout_above="@id/lazyLoadingProgressBar"
-        />
+        android:layout_below="@+id/recyclerViewForChoosingCountry"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:scrollbars="vertical" />
+
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/screenLoadingProgressBar"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerInParent="true"
         android:visibility="visible" />
+
     <ProgressBar
         android:id="@+id/lazyLoadingProgressBar"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"
-        android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
-        android:layout_alignParentBottom="true">
+        android:layout_marginBottom="5dp"
+        android:visibility="gone">
 
     </ProgressBar>
 

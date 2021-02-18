@@ -3,29 +3,32 @@ package com.example.news_reader.hilt
 import android.content.Context
 import com.example.news_reader.data.room.RoomDB
 import com.example.news_reader.data.retrofit.RetrofitInterfaceIml
+import com.example.news_reader.data.room.NewsDaoImplementation
+import com.example.news_reader.domain.room.NewsDao
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 @Module
 class NetworkingModule {
 
     @Provides
-    @Singleton
     fun okHTTPClient(): OkHttpClient = OkHttpClient
         .Builder()
         .build()
 
     @Provides
-    @Singleton
     fun prepareRetrofit(): RetrofitInterfaceIml {
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl("https://newsapi.org/")
@@ -38,10 +41,11 @@ class NetworkingModule {
     }
 }
 
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 @Module
-class DatabaseModule{
-    @Provides
+class DatabaseModule {
     @Singleton
+    @Provides
     fun prepareRoom(@ApplicationContext context: Context): RoomDB = RoomDB.invoke(context)
+
 }

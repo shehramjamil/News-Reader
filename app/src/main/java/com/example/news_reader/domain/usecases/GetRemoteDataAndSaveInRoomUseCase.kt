@@ -21,6 +21,7 @@ class GetRemoteDataAndSaveInRoomUseCase @Inject constructor(
             401 -> CODE401
             429 -> CODE429
             500 -> CODE500
+            502 -> CODE502
             else -> "Unknown Error"
         }
 

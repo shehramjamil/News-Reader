@@ -10,10 +10,11 @@ class NewsDataFromRoomUseCase @Inject constructor(
     private val newsRepository: NewsRepository,
     private val newsMapper: NewsMapper,
 ) {
-    fun invoke(position: Int) = newsRepository.getNewsDataFromRoom(position)?.transform {
+    fun invoke(position: Int?,countryName: String) = newsRepository.getNewsDataFromRoom(position,countryName)?.transform {
         if (it.isNullOrEmpty()) {
             emit(CustomResponseHandler.loading(null))
         } else {
+            kotlinx.coroutines.delay(1000)
             emit(CustomResponseHandler.success(newsMapper.localToBuisnessModelMapping(it)))
         }
     }
